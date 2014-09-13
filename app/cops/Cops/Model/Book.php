@@ -307,9 +307,6 @@ class Book extends EntityAbstract
      */
     public function updateComment($comment, $bookId)
     {
-        if ($bookId === null) {
-            $bookId = $this->getId();
-        }
         return $this->getResource()->updateComment($bookId, $comment);
     }
 

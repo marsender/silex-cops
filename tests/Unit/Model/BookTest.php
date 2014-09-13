@@ -84,7 +84,7 @@ class BookTest extends WebTestCase
         $this->assertEquals(2, $modifiedBook->getAuthors()->count());
 
         // Revert back to original author
-        $origBook->updateAuthor($origNames);
+        $origBook->updateAuthor($origNames, $origBook->getId());
     }
 
     public function testUpdateTitle()

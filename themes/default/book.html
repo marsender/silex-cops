@@ -4,6 +4,22 @@
 {% set date_edit   = "MM/DD/YYYY" |trans %}
 {% set editableTags = '' %}
 
+{% block beforeHeadEnd %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/zipjs/zip.js"></script>
+    <script type="text/javascript">
+        zip.workerScriptsPath = "{{ app.request.basepath }}/assets/zipjs/";
+        //zip.useWebWorkers = false;
+    </script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/zipjs/zip-fs.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/zipjs/zip-ext.js"></script>
+
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/epub.js"></script>
+    <script type="text/javascript">
+        EPUBJS.filePath = "{{ app.request.basepath }}/assets/zipjs/";
+    </script>
+{% endblock %}
+
 {% block mainBody %}
 <div id="book_detail" class="mainContent">
 
@@ -80,6 +96,10 @@
 
         {% include 'book_download_link.html' with {'book': book} %}
 
+        <p id="preview">
+            <a class="book_link" href="#" title="Preview">&rsaquo; Preview</a>
+        </p>
+
         <div id="comments">
             <div class="editable" data-type="textarea" data-name="comment" data-inputclass="comments">{{ book.getComment()|striptags('<br>')|raw }}</div>
         </div>
@@ -120,10 +140,15 @@
 
     {% if inline_edit %}
     <script type="text/javascript">
+        "use strict";
+
         jQuery.fn.editable.defaults.mode = 'inline';
 
         jQuery('document').ready(function() {
 
+            /**
+             * Inline edit features
+             */
             var myTags = [];
             jQuery('#tag-list a').each(function() {
                 myTags.push(jQuery(this).text());
@@ -170,6 +195,12 @@
                 jQuery(this).children('span').toggle();
             })
 
+            /**
+             * Book preview feature
+             */
+            jQuery('#preview a').click(function() {
+                ePub("{{ url('book_file', {id: book.getId(), format: book.getFile().getFormat()}) }}").renderTo("preview");
+            });
         });
 
     </script>

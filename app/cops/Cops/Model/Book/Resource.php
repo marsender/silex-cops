@@ -54,6 +54,8 @@ class Resource extends ResourceAbstract
      * @param  \Cops\Model\Book $book
      *
      * @return array
+     *
+     * @throws BookException
      */
     public function load($bookId)
     {
