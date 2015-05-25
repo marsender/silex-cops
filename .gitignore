@@ -4,9 +4,11 @@
 .buildpath
 composer.phar
 
-# data
+# Data
 data/*
 web/assets/books
 web/assets/select2
 vendor
 
+# Config
+app/src/config.ini

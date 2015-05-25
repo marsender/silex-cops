@@ -27,10 +27,18 @@ mobile_theme      = mobile             ; The subdir for mobile template
 
 [path]
 public_dir        = web                ; Public apache root directory
-data_dir[default] = data               ; Directories where calibre data are stored - First is default one
-data_dir[test]    = tests/data         ; You can add as many lines as needed
-                                       ; Path can be absolute or relative
-
+; Directories where calibre data are stored - First is default one
+data_dir[classic-literature] = /opt/atoll/opds/atoll-en/classic-literature
+data_dir[bibebook] = /opt/atoll/opds/bibebook
+data_dir[bnr] = /opt/atoll/opds/bnr
+data_dir[brs] = /opt/atoll/opds/brs
+data_dir[ebooksgratuits] = /opt/atoll/opds/ebooksgratuits
+data_dir[efele] = /opt/atoll/opds/efele
+data_dir[eforge] = /opt/atoll/opds/eforge
+data_dir[gallica] = /opt/atoll/opds/gallica
+data_dir[gloubik] = /opt/atoll/opds/gloubik
+data_dir[ibooknook] = /opt/atoll/opds/ibooknook
+data_dir[test]    = tests/data
 internal_db       = data/silexCops     ; Internal database file name - needs write access
 
 [email]
@@ -48,9 +56,9 @@ cover_height      = 260                ; Thumbnail height
 
 [admin]
 admin_path        = /admin             ; Backoffice path
-default_login     = admin              ; Administrator default login (used on db init / reset)
-default_password  = password           ; Administrator default password (used on db init / reset)
-inline_edit       = true               ; Allow inline editing for specified roles (true|false) needs write access to Calibre DB
+default_login     = guest              ; Administrator default login (used on db init / reset)
+default_password  = guest              ; Administrator default password (used on db init / reset)
+inline_edit       = false              ; Allow inline editing for specified roles (true|false) needs write access to Calibre DB
 
 [calibre]
 author_sort_copy_method = invert       ; Author sort copy algorithm when modifying books from Silex-Cops -(invert | comma | copy | nocomma)
