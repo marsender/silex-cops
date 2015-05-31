@@ -28,7 +28,7 @@ mobile_theme      = mobile             ; The subdir for mobile template
 [path]
 public_dir        = web                ; Public apache root directory
 ; Directories where calibre data are stored - First is default one
-data_dir[classic-literature] = /opt/atoll/opds/atoll-en/classic-literature
+data_dir[atoll-en] = /opt/atoll/opds/atoll-en/classic-literature
 data_dir[bibebook] = /opt/atoll/opds/bibebook
 data_dir[bnr] = /opt/atoll/opds/bnr
 data_dir[brs] = /opt/atoll/opds/brs
@@ -56,9 +56,9 @@ cover_height      = 260                ; Thumbnail height
 
 [admin]
 admin_path        = /admin             ; Backoffice path
-default_login     = guest              ; Administrator default login (used on db init / reset)
-default_password  = guest              ; Administrator default password (used on db init / reset)
-inline_edit       = false              ; Allow inline editing for specified roles (true|false) needs write access to Calibre DB
+default_login     = admin              ; Administrator default login (used on db init / reset)
+default_password  = password           ; Administrator default password (used on db init / reset)
+inline_edit       = true               ; Allow inline editing for specified roles (true|false) needs write access to Calibre DB
 
 [calibre]
 author_sort_copy_method = invert       ; Author sort copy algorithm when modifying books from Silex-Cops -(invert | comma | copy | nocomma)
