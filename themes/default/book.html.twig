@@ -57,7 +57,7 @@
             {% set tagClass = "toggle" %}
         {% endif %}
 
-        <p id="tag-list" class="{{ tagClass|raw }}" {{ tagStyle|raw }}> {{ "Tag :"|transchoice(tags.count()) }}
+        <p id="tag-list" class="{{ tagClass|raw }}" {{ tagStyle|raw }}> {{ "Tag:"|transchoice(tags.count()) }}
             <span class="bold">
             {% for tag in tags %}
                 {% set editableTags = editableTags ~ ", " ~ tag.getName() %}
