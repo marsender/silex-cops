@@ -15,11 +15,11 @@ author_page_size  = 25
 
 [tag]
 homepage_tags     = 50                 ; Number of tags per page on homepage
-tag_page_size     = 25                 ; Book pagination when browing tag
+tag_page_size     = 25                 ; Book pagination when browsing tag
 
 [search]
 search_engine     = sqlite             ; more later..
-search_page_size  = 25                 ; Books pagination when browing search results
+search_page_size  = 25                 ; Books pagination when browsing search results
 
 [web]
 theme             = default            ; The theme directory
