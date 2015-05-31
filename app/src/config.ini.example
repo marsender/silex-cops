@@ -27,18 +27,10 @@ mobile_theme      = mobile             ; The subdir for mobile template
 
 [path]
 public_dir        = web                ; Public apache root directory
-; Directories where calibre data are stored - First is default one
-data_dir[atoll-en] = /opt/atoll/opds/atoll-en/classic-literature
-data_dir[bibebook] = /opt/atoll/opds/bibebook
-data_dir[bnr] = /opt/atoll/opds/bnr
-data_dir[brs] = /opt/atoll/opds/brs
-data_dir[ebooksgratuits] = /opt/atoll/opds/ebooksgratuits
-data_dir[efele] = /opt/atoll/opds/efele
-data_dir[eforge] = /opt/atoll/opds/eforge
-data_dir[gallica] = /opt/atoll/opds/gallica
-data_dir[gloubik] = /opt/atoll/opds/gloubik
-data_dir[ibooknook] = /opt/atoll/opds/ibooknook
-data_dir[test]    = tests/data
+data_dir[default] = data               ; Directories where calibre data are stored - First is default one
+data_dir[test]    = tests/data         ; You can add as many lines as needed
+                                       ; Path can be absolute or relative
+
 internal_db       = data/silexCops     ; Internal database file name - needs write access
 
 [email]
