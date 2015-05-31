@@ -214,11 +214,8 @@ class BookRepository extends AbstractRepository implements ApplicationAwareInter
      */
     public function findByKeyword(array $keywords)
     {
-        // -DC- Search author and title instead of path
         $qb = $this->getBaseSelect()
             ->addSelect('main.id')
-            ->leftJoin('main', 'books_authors_link', 'bal',    'bal.book = main.id')
-            ->leftJoin('main', 'authors',            'author', 'author.id = bal.author')
             ->orderBy('serie_name')
             ->addOrderBy('series_index')
             ->addOrderBy('title')
@@ -226,27 +223,19 @@ class BookRepository extends AbstractRepository implements ApplicationAwareInter
             ->resetQueryParts(array('where'));
 
         // Build the where clause - path includes author name so it's not added
-        //$andPath  = $qb->expr()->andX();
-        $andTitle  = $qb->expr()->andX();
-        $andAuthor  = $qb->expr()->andX();
+        $andPath  = $qb->expr()->andX();
         $andSerie = $qb->expr()->andX();
 
         foreach ($keywords as $keyword) {
-            //$andPath->add(
-            //    $qb->expr()->like('main.path', $this->getConnection()->quote('%'.$keyword.'%'))
-            //);
-            $andTitle->add(
-                $qb->expr()->like('main.title', $this->getConnection()->quote('%'.$keyword.'%'))
-            );
-            $andAuthor->add(
-                $qb->expr()->like('author.name', $this->getConnection()->quote('%'.$keyword.'%'))
+            $andPath->add(
+                $qb->expr()->like('main.path', $this->getConnection()->quote('%'.$keyword.'%'))
             );
             $andSerie->add(
                 $qb->expr()->like('serie.sort', $this->getConnection()->quote('%'.$keyword.'%'))
             );
         }
 
-        $qb->orWhere($andTitle, $andAuthor, $andSerie); // $andPath
+        $qb->orWhere($andPath, $andSerie);
 
          return $this->paginate($qb, array('select', 'orderBy'))
             ->execute()

@@ -287,7 +287,7 @@ class Application extends BaseApplication
     private function registerRepositories()
     {
         $this['repository.book'] = $this->share(function () {
-            return new \Cops\Core\Entity\BookRepository;
+            return new \Cops\Core\Entity\BookRepositoryAtoll;
         });
 
         $this['repository.author'] = $this->share(function ($c) {
