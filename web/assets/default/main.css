@@ -66,6 +66,11 @@ h4 { font-size:0.82em; padding:0; margin:0; }
         padding-right:8px;
         text-align:justify;
     }
+    
+    .comment {
+        padding-left:8px;
+        padding-bottom:8px;
+    }
 
     .mainContent a.book_link {
         font-size:0.92em;
