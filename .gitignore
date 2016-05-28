@@ -16,3 +16,5 @@
 /web/assets/select2
 /vendor
 
+# Config
+app/src/config.ini
