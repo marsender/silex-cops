@@ -20,10 +20,45 @@ use Cops\Core\Entity\Exception\TagNotFoundException;
 class Tag extends AbstractBookCount implements CollectionableInterface
 {
     /**
+     * Repository interface to be checked
+     */
+    const REPOSITORY_INTERFACE = 'Cops\Core\Entity\RepositoryInterface\TagRepositoryInterface';
+
+    /**
+     * Book ID for book linking
+     * @var int
+     */
+    private $bookId;
+
+    /**
      * Name
      * @var string
      */
     private $name;
+
+    /**
+     * Set bookId
+     *
+     * @param  int   $bookId
+     *
+     * @return $this
+     */
+    public function setBookId($bookId)
+    {
+        $this->bookId = (int) $bookId;
+
+        return $this;
+    }
+
+    /**
+     * Get bookId
+     *
+     * @return int
+     */
+    public function getBookId()
+    {
+        return $this->bookId;
+    }
 
     /**
      * Set name
@@ -108,7 +143,6 @@ class Tag extends AbstractBookCount implements CollectionableInterface
      * Associate tag to given book ID
      *
      * @param  Book   $book
-     * @param  string $name
      *
      * @return bool
      */

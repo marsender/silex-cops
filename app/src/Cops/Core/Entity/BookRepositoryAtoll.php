@@ -9,13 +9,16 @@
  */
 namespace Cops\Core\Entity;
 
-use Cops\Core\AbstractRepository;
+//use Cops\Core\Entity\BookRepository;
+//use Cops\Core\AbstractRepository;
+use Cops\Core\Entity\Book\EditableBookRepository;
 
 /**
  * Atoll version of book repository in order to surchage search
  * @author Didier Corbière <contact@atoll-digital-library.org>
  */
-class BookRepositoryAtoll extends BookRepository
+//class BookRepositoryAtoll extends BookRepository
+class BookRepositoryAtoll extends EditableBookRepository
 {
     /**
      * Find by keyword using author and title tables instread of path

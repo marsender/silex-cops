@@ -10,13 +10,16 @@
 namespace Cops\Core\Entity;
 
 use Cops\Core\AbstractRepository;
+use Cops\Core\Entity\RepositoryInterface\TagRepositoryInterface;
 use PDO;
+use Doctrine\DBAL\Connection;
+use Cops\Core\Entity\BookCollection;
 
 /**
  * Tag repository
  * @author Mathieu Duplouy <mathieu.duplouy@gmail.com>
  */
-class TagRepository extends AbstractRepository
+class TagRepository extends AbstractRepository implements TagRepositoryInterface
 {
     /**
      * Load a tag data
@@ -249,5 +252,28 @@ class TagRepository extends AbstractRepository
             ->from('tags', 'main')
             ->execute()
             ->fetchColumn(0);
+    }
+
+    /**
+     * Load tag from a book collection
+     *
+     * @param  BookCollection $books
+     *
+     * @return array
+     */
+    public function loadFromBooks(BookCollection $books)
+    {
+        return $this->getQueryBuilder()
+            ->select(
+                'main.*',
+                'books.id AS bookId'
+            )
+            ->from('tags', 'main')
+            ->innerJoin('main', 'books_tags_link', 'btl',   'main.id = btl.tag')
+            ->innerJoin('main', 'books',           'books', 'books.id = btl.book')
+            ->where('books.id IN (:book_id)')
+            ->setParameter(':book_id', $books->getAllIds(), Connection::PARAM_INT_ARRAY)
+            ->execute()
+            ->fetchAll(PDO::FETCH_ASSOC);
     }
 }

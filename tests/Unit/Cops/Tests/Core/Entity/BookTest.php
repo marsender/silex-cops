@@ -17,6 +17,24 @@ class BookTest extends AbstractTestCase
     }
 
     /**
+     * @expectedException \LogicException
+     */
+    public function testSetIdException()
+    {
+        $book = $this->getBook();
+
+        $book->setId(1)->setId(2);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetRepositoryException()
+    {
+        $this->getBook()->setRepository(new \stdClass);
+    }
+
+    /**
      * @expectedException \Cops\Core\Entity\Exception\BookNotFoundException
      */
     public function testFindByIdException()
@@ -63,21 +81,23 @@ class BookTest extends AbstractTestCase
     public function testFindByIdAndDatabaseMapping()
     {
         $data = array(
-            'pubdate'       => '2009-02-01 22:23:24+00:00',
-            'title'         => 'dummy title',
-            'sort'          => 'dummy sort',
-            'cover_present' => '1',
-            'path'          => 'dummy path',
-            'comment'       => 'dummy comment',
-            'last_modified' => '2010-01-02 12:13:14.598308+00:00',
-            'series_index'  => '1.0',
-            'isbn'          => 'dummy isbn',
-            'lccn'          => 'dummy lccn',
-            'flags'         => '1',
-            'uuid'          => 'c96893dc-fd48-487a-9d1a-1c4123ee16ef',
-            'serie_id'      => '1',
-            'serie_name'    => 'dummy serie name',
-            'serie_sort'    => 'dummy serie sort',
+            0 => array(
+                'pubdate'       => '2009-02-01 22:23:24+00:00',
+                'title'         => 'dummy title',
+                'sort'          => 'dummy sort',
+                'cover_present' => '1',
+                'path'          => 'dummy path',
+                'comment'       => 'dummy comment',
+                'last_modified' => '2010-01-02 12:13:14.598308+00:00',
+                'series_index'  => '1.0',
+                'isbn'          => 'dummy isbn',
+                'lccn'          => 'dummy lccn',
+                'flags'         => '1',
+                'uuid'          => 'c96893dc-fd48-487a-9d1a-1c4123ee16ef',
+                'serie_id'      => '1',
+                'serie_name'    => 'dummy serie name',
+                'serie_sort'    => 'dummy serie sort',
+            ),
         );
 
         $mock = $this->getMock('\Cops\Core\Entity\BookRepository');
@@ -92,23 +112,23 @@ class BookTest extends AbstractTestCase
 
         $this->assertInstanceOf('\DateTime', $book->getPubDate());
         $this->assertEquals($book->getPubDate()->format('Y-m-d'), '2009-02-01');
-        $this->assertEquals($book->getTitle(), $data['title']);
-        $this->assertEquals($book->getSort(),  $data['sort']);
+        $this->assertEquals($book->getTitle(), $data[0]['title']);
+        $this->assertEquals($book->getSort(),  $data[0]['sort']);
         $this->assertTrue($book->hasCover());
-        $this->assertEquals($book->getPath(), $data['path']);
-        $this->assertEquals($book->getComment(), $data['comment']);
+        $this->assertEquals($book->getPath(), $data[0]['path']);
+        $this->assertEquals($book->getComment(), $data[0]['comment']);
         $this->assertInstanceOf('\DateTime', $book->getLastModified());
         $this->assertEquals($book->getLastModified()->format('Y-m-d'), '2010-01-02');
-        $this->assertEquals($book->getSeriesIndex(), $data['series_index']);
-        $this->assertEquals($book->getIsbn(), $data['isbn']);
-        $this->assertEquals($book->getLccn(), $data['lccn']);
+        $this->assertEquals($book->getSeriesIndex(), $data[0]['series_index']);
+        $this->assertEquals($book->getIsbn(), $data[0]['isbn']);
+        $this->assertEquals($book->getLccn(), $data[0]['lccn']);
         $this->assertTrue($book->getFlags());
-        $this->assertEquals($book->getUuid(), $data['uuid']);
+        $this->assertEquals($book->getUuid(), $data[0]['uuid']);
 
         $this->assertInstanceOf('\Cops\Core\Entity\Serie', $book->getSerie());
-        $this->assertEquals($book->getSerie()->getId(), $data['serie_id']);
-        $this->assertEquals($book->getSerie()->getName(), $data['serie_name']);
-        $this->assertEquals($book->getSerie()->getSort(), $data['serie_sort']);
+        $this->assertEquals($book->getSerie()->getId(), $data[0]['serie_id']);
+        $this->assertEquals($book->getSerie()->getName(), $data[0]['serie_name']);
+        $this->assertEquals($book->getSerie()->getSort(), $data[0]['serie_sort']);
 
         $this->assertInstanceOf('\Cops\Core\Entity\AuthorCollection', $book->getAuthors());
         $this->assertInstanceOf('\Cops\Core\Cover', $book->getCover());
@@ -175,61 +195,25 @@ class BookTest extends AbstractTestCase
      */
     protected function getBook()
     {
-        return $this->app['entity.book'];
+        return new \Cops\Core\Entity\Book(
+            $this->app['cover'],
+            $this->app['entity.serie'],
+            $this->app['collection.author'],
+            $this->app['collection.tag'],
+            $this->app['collection.bookfile'],
+            new \DateTime
+        );
     }
 
-    public function BasicGetters()
+    public function testBasicGetters()
     {
         $book = $this->getBook();
 
-        $this->assertInstanceOf('Cops\Model\Cover', $book->getCover());
-        $this->assertInstanceOf('Cops\Model\Serie', $book->getSerie());
-        $this->assertInstanceOf('Cops\Model\Author\Collection', $book->getAuthors());
-        $this->assertInstanceOf('Cops\Model\BookFile\Collection', $book->getFiles());
+        $this->assertInstanceOf('Cops\Core\Cover', $book->getCover());
+        $this->assertInstanceOf('Cops\Core\Entity\Serie', $book->getSerie());
+        $this->assertInstanceOf('Cops\Core\Entity\AuthorCollection', $book->getAuthors());
+        $this->assertInstanceOf('Cops\Core\Entity\BookFile\BookFileCollection', $book->getFiles());
         $this->assertFalse($book->hasCover());
     }
-
-    public function UpdateAuthor()
-    {
-        $origBook = $this->getRealBook();
-
-        // Check there is 1 author
-        $origAuthors = $origBook->getAuthors();
-        $origNames = $origAuthors->getName();
-        $this->assertEquals(1, $origAuthors->count());
-
-        // Check now there are 2
-        $origBook->updateAuthor('John Smith & Jane Doe');
-        $modifiedBook = $this->getRealBook();
-        $this->assertEquals(2, $modifiedBook->getAuthors()->count());
-
-        // Revert back to original author
-        $origBook->updateAuthor($origNames);
-    }
-
-    public function UpdateTitle()
-    {
-        $book = $this->getRealBook();
-
-        $origTitle = $book->getTitle();
-
-        $this->assertTrue(
-            $book->updateTitle('dummy-title'),
-            'Book::updateTitle() failed'
-        );
-
-        $this->assertEquals(
-            $book->getTitle(),
-            'dummy-title',
-            'Book setTitle() non consistent after Book::updateTitle() call'
-        );
-
-        // Revert back original title
-        $this->assertTrue(
-            $book->updateTitle($origTitle),
-            'Book::updateTitle() failed'
-        );
-    }
-
 
 }

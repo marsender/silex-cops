@@ -21,6 +21,11 @@ use Cops\Core\Entity\Exception\AuthorNotFoundException;
 class Author extends AbstractBookCount implements CollectionableInterface
 {
     /**
+     * Repository interface to be checked
+     */
+    const REPOSITORY_INTERFACE = 'Cops\Core\Entity\RepositoryInterface\AuthorRepositoryInterface';
+
+    /**
      * Book ID for book linking
      * @var int
      */
@@ -40,14 +45,14 @@ class Author extends AbstractBookCount implements CollectionableInterface
 
     /**
      * Calibre instance for sort operations
-     * @var Calibre
+     * @var CalibreUtil
      */
     private $calibre;
 
     /**
      * Constructor
      *
-     * @param Calibre $calibre
+     * @param CalibreUtil $calibre
      */
     public function __construct(CalibreUtil $calibre)
     {

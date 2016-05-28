@@ -79,6 +79,32 @@ h4 { font-size:0.82em; padding:0; margin:0; }
     }
 
 /**
+ * Header blocks
+ */
+#header .user_action {
+    text-decoration:underline;
+    margin-left:6px;
+}
+
+/**
+ *     User login form
+ */
+div.form {
+    padding:12px;
+    border:1px #CCC solid;
+    margin-bottom:8px;
+}
+    div.form label {
+        display:inline-block;
+        width:25%;
+        margin-bottom:8px;
+        text-align:right;
+    }
+    div#submit-button {
+        text-align:center;
+        margin-right:25%;
+    }
+/**
  * Serie & author block on homepage
  */
 #main ul.aggregated {
@@ -134,6 +160,29 @@ h4 { font-size:0.82em; padding:0; margin:0; }
         margin-bottom:14px;
     }
 
+    #user_actions {
+        margin-bottom:12px;
+    }
+        #user_actions label {
+            font-size:0.86em;
+            text-decoration:underline;
+        }
+
+        #user_actions label:hover {
+            cursor:pointer;
+        }
+
+        #user_actions label.disabled {
+            color:#666;
+            text-decoration:none;
+        }
+
+        #user_actions input {
+            position:relative;
+            bottom:-2px;
+            margin-right:0;
+        }
+
 /**
  * Serie detail blocks
  */
@@ -157,6 +206,7 @@ h4 { font-size:0.82em; padding:0; margin:0; }
         float:left;
         margin:5px 15px 5px 5px;
     }
+
 
 
 /**

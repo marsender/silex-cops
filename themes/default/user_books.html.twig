@@ -1,0 +1,63 @@
+{% extends "layout.html.twig" %}
+
+{% set date_format = "m/d/Y"|trans %}
+
+{% block mainBody %}
+<div id="search_results" class="mainContent">
+
+    {% set paginator %}
+    <div class="center">
+        {% include "user_books/paginator.html.twig" with {"action": action, "pageNum": pageNum, "totalBooks": totalBooks, "pageCount": pageCount} %}
+    </div>
+    {% endset %}
+
+    {{ paginator }}
+
+    <form method="post" action="">
+
+        <div id="user-actions">
+            <p class="small" style="margin-bottom:0">{{ "Select / Deselect all"|trans }}</p>
+
+            <input id="js-select-all" type="checkbox" style="margin-left:13px; margin-bottom:-8px;" />
+
+            <input name="remove" type="submit" class="ui-button" style="margin-left:85px; margin-bottom:8px; padding:1px 1px 0 1px;" id="js-submit-multi" value="{{ "Remove selection"|trans }}" />
+
+            {% for archive in app["factory.archive"].getAdapterkeys() %}
+            <input type="submit" name="download_{{ archive }}" class="ui-button" style="margin-bottom:8px; padding:1px 1px 0 1px;" id="js-submit-download" value="{{ "Download as %s"|trans|format(archive) }}" />
+            {% endfor %}
+
+        </div>
+
+        <div id="user-books">
+            {% include "user_books_listing.html.twig" with {"books": books} %}
+        </div>
+
+    </form>
+
+    {{ paginator }}
+
+</div>
+
+<script type="text/javascript">
+
+    var buttons = jQuery(".ui-button", jQuery("#user-actions")).attr('disabled', 'disabled');
+    var context = jQuery("#user-books");
+
+    jQuery("div.book > div > input", context).change(function() {
+        console.log('change');
+        if (jQuery("div.book > div > input:checked", context).length > 0) {
+            buttons.removeClass("ui-state-disabled").removeAttr('disabled');
+        } else {
+            buttons.addClass("ui-state-disabled").attr('disabled', 'disabled');
+        }
+    });
+
+    jQuery("#js-select-all").change(function() {
+        jQuery("div.book > div > input", context).prop("checked", jQuery(this).prop("checked"));
+        jQuery("div.book > div > input:eq(0)", context).change();
+    });
+
+    jQuery("div.book > div > input:eq(0)", context).change();
+
+</script>
+{% endblock %}

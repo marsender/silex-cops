@@ -113,7 +113,10 @@ class BookController implements ControllerProviderInterface
 
         $books = $app['collection.book']->setFirstResult(($page-1) * $itemPerPage)
             ->setMaxResults($itemPerPage)
-            ->findSortedByDate();
+            ->findSortedByDate()
+            ->addAuthors($app['collection.author'])
+            ->addTags($app['collection.tag'])
+            ->addBookFiles($app['collection.bookfile']);
 
         $totalBooks = $app['collection.book']->countAll();
 
@@ -156,9 +159,7 @@ class BookController implements ControllerProviderInterface
     protected function getBookFileOrRedirect(Application $app, $format, Book $book)
     {
         try {
-
             return $book->getFile($format);
-
         } catch (FormatUnavailableException $e) {
             $url = $app['url_generator']->generate('book_detail', array('id' => $book->getId()));
             $app['response'] = $app->redirect($url);

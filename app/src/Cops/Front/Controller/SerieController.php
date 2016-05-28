@@ -49,13 +49,13 @@ class SerieController implements ControllerProviderInterface
      * List series action
      *
      * @param Application $app
-     * @param string|0    $letter
+     * @param string      $letter
      *
      * @return string
      */
-    public function listAction(Application $app, $letter = 0)
+    public function listAction(Application $app, $letter = '0')
     {
-        if ($letter === '0') {
+        if ($letter == '0') {
             $letter = '#';
         }
 

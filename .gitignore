@@ -1,14 +1,18 @@
 # Misc
-.project
-.settings
-.buildpath
-composer.phar
+/.project
+/.settings
+/.buildpath
+/composer.phar
 
-# Data
-data/*
-web/assets/books
-web/assets/select2
-vendor
+#config
+/app/src/config.ini
+!/app/src/config.ini.sample
+/web/.htaccess
+!/web/.htaccess.sample
 
-# Config
-app/src/config.ini
+# data
+/data/*
+/web/assets/books
+/web/assets/select2
+/vendor
+

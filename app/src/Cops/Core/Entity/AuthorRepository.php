@@ -10,6 +10,7 @@
 namespace Cops\Core\Entity;
 
 use Cops\Core\AbstractRepository;
+use Cops\Core\Entity\RepositoryInterface\AuthorRepositoryInterface;
 use Cops\Core\StringUtils;
 use Doctrine\DBAL\Connection;
 use PDO;
@@ -20,7 +21,7 @@ use Cops\Core\Entity\BookCollection;
  * Author repository
  * @author Mathieu Duplouy <mathieu.duplouy@gmail.com>
  */
-class AuthorRepository extends AbstractRepository
+class AuthorRepository extends AbstractRepository implements AuthorRepositoryInterface
 {
     /**
      * String utils instance
@@ -122,14 +123,16 @@ class AuthorRepository extends AbstractRepository
     /**
      * Delete author
      *
+     * @param  Author $author
+     *
      * @return bool
      */
-    public function delete()
+    public function delete(Author $author)
     {
         return (bool) $this->getConnection()
             ->delete('authors',
             array(
-                'id' => $this->getEntity()->getId(),
+                'id' => $author->getId(),
             ),
             array(
                 PDO::PARAM_INT,
@@ -242,7 +245,7 @@ class AuthorRepository extends AbstractRepository
     /**
      * Load author data from a book collection
      *
-     * @param  Collection $books
+     * @param  BookCollection $books
      *
      * @return array
      */

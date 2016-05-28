@@ -17,7 +17,7 @@ class UserControllerTest extends AbstractTestCase
 
         $session = $this->app['session'];
 
-        $firewall = 'admin';
+        $firewall = 'default';
         $token = new UsernamePasswordToken('admin', 'test', $firewall, array('ROLE_ADMIN'));
         $session->set('_security_'.$firewall, serialize($token));
         $session->save();
@@ -31,7 +31,7 @@ class UserControllerTest extends AbstractTestCase
     public function testNoAccessForNonAdmin()
     {
         // Create temporary database
-        $this->app['repository.user']->initTable();
+        $this->app['repository.user']->createTable();
 
         $client = $this->createClient();
 
@@ -71,7 +71,6 @@ class UserControllerTest extends AbstractTestCase
         $nbUsersBefore = $this->app['collection.user']->findAll()->count();
 
         $client->request('GET', '/admin/fr/users/add');
-        //$client->followRedirects(true);
 
         $form = $client->getCrawler()->selectButton('user_save')->form();
 

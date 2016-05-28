@@ -58,6 +58,20 @@ class BookCollection extends AbstractCollection
     }
 
     /**
+     * Find by id
+     *
+     * @param array $ids
+     *
+     * @return $this
+     */
+    public function findById(array $ids)
+    {
+        return $this->setDataFromArray(
+            $this->getRepository()->findById($ids)
+        );
+    }
+
+    /**
      * Find all books
      *
      * @return $this
@@ -141,11 +155,16 @@ class BookCollection extends AbstractCollection
         $authors = $book->getAuthors();
 
         if ($authors->count() == 1) {
+
+            // Force int cast
+            $authorId = $authors->getAllIds();
+            $authorId = current($authorId);
+
             $this->getRepository()
                 ->setExcludedBookId($book->getId())
                 ->setExcludedSerieId($book->getSerie()->getId());
             // Only one id in collection
-            $this->findByAuthorId($authors->getAllIds());
+            $this->findByAuthorId($authorId);
         }
 
         return $this;
@@ -212,9 +231,9 @@ class BookCollection extends AbstractCollection
     public function addTags(TagCollection $tags)
     {
         foreach ($tags->findFromBooks($this) as $tag) {
-            $this->getById($author->getBookId())
+            $this->getById($tag->getBookId())
                 ->getTags()
-                ->add($author);
+                ->add($tag);
         }
 
         return $this;

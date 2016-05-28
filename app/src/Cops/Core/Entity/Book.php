@@ -11,7 +11,6 @@ namespace Cops\Core\Entity;
 
 use Cops\Core\AbstractEntity;
 use Cops\Core\CollectionableInterface;
-use Silex\Application as BaseApplication;
 use Cops\Core\Entity\AuthorCollection;
 use Cops\Core\Cover;
 use Cops\Core\Entity\Serie;
@@ -23,8 +22,13 @@ use Cops\Core\Entity\Exception\BookNotFoundException;
  * Book entity
  * @author Mathieu Duplouy <mathieu.duplouy@gmail.com>
  */
-class Book extends AbstractEntity implements CollectionableInterface
+class Book extends AbstractEntity implements BookInterface, CollectionableInterface
 {
+    /**
+     * Repository interface to be checked
+     */
+    const REPOSITORY_INTERFACE = 'Cops\Core\Entity\RepositoryInterface\BookRepositoryInterface';
+
     /**
      * Object ID
      * @var int
@@ -33,7 +37,7 @@ class Book extends AbstractEntity implements CollectionableInterface
 
     /**
      * Publication date
-     * @var string
+     * @var \DateTime|null
      */
     private $pubdate;
 
@@ -75,13 +79,13 @@ class Book extends AbstractEntity implements CollectionableInterface
 
     /**
      * Last modified
-     * @var \DateTime
+     * @var \DateTime|null
      */
     private $lastModified;
 
     /**
      * Serie index
-     * @var int
+     * @var string
      */
     private $seriesIndex = 0;
 
@@ -148,7 +152,6 @@ class Book extends AbstractEntity implements CollectionableInterface
     /**
      * Constructor
      *
-     * @param BaseApplication    $app
      * @param Cover              $cover
      * @param Serie              $serie
      * @param AuthorCollection   $authorCollection
@@ -183,15 +186,14 @@ class Book extends AbstractEntity implements CollectionableInterface
      */
     public function findById($bookId)
     {
-        $result = $this->setId($bookId)
-            ->getRepository()
+        $result = $this->getRepository()
             ->findById($bookId);
 
-        if (empty($result)) {
+        if (empty($result[0])) {
             throw new BookNotFoundException(sprintf('Book width id %s not found', $bookId));
         }
 
-        $this->setDataFromArray($result);
+        $this->setDataFromArray($result[0]);
         $this->authorCollection->findByBookId($bookId);
         $this->bookFileCollection->findFromBook($this);
 
@@ -236,7 +238,9 @@ class Book extends AbstractEntity implements CollectionableInterface
      */
     public function setPubdate($pubdate, $format = '!Y-m-d H:i:sP')
     {
-        $this->pubdate = $this->dateHelper->createfromformat($format, $pubdate);
+        if ($pubDate = $this->dateHelper->createfromformat($format, $pubdate)) {
+            $this->pubdate = $pubDate;
+        }
 
         return $this;
     }
@@ -302,7 +306,7 @@ class Book extends AbstractEntity implements CollectionableInterface
     /**
      * Set cover present
      *
-     * @param bool $hasCover
+     * @param bool $coverPresent
      *
      * @return $this
      */
@@ -404,7 +408,9 @@ class Book extends AbstractEntity implements CollectionableInterface
      */
     public function setLastModified($lastModified, $format = '!Y-m-d H:i:s#??????P')
     {
-        $this->lastModified = $this->dateHelper->createfromformat($format, $lastModified);
+        if ($lastModified = $this->dateHelper->createfromformat($format, $lastModified)) {
+            $this->lastModified = $lastModified;
+        }
 
         return $this;
     }
